@@ -9,8 +9,8 @@ app.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $url
     controller: 'MainCtrl'
   })
   .state('posts', {
-    url: '/posts{id}',
-    templateUrl: 'posts.ejs',
+    url: '/posts/{id}',
+    templateUrl: '/posts.html',
     controller: 'PostsCtrl'
   });
 
@@ -21,7 +21,10 @@ app.factory('posts', [function() {
 
   var o = {
     posts: [
-      {title:'post1', upvotes: 3},
+      {title:'post1', upvotes: 3, comments: [
+        {author: 'Bla', body: 'asum stuff', upvotes: 0},
+        {author: 'Alice', body: 'sheit', upvotes: 0},
+      ]},
       {title:'post2', upvotes: 4},
       {title:'post3', upvotes: 3},
       {title:'post4', upvotes: 25},
@@ -37,6 +40,7 @@ app.controller('PostsCtrl', [
   function($scope, $stateParams, posts) {
 
     $scope.post = posts.posts[$stateParams.id];
+
 
 }]);
 
@@ -79,6 +83,7 @@ app.controller('MainCtrl', [
 
     $scope.incrementUpvotes = function(post) {
       post.upvotes += 1;
+      console.log("voted up");
     };
 
 
