@@ -87,7 +87,7 @@ router.post('/posts/:post/comments', function(req, res, next) {
   });
 });
 
-route.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
+router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
   req.post.upvote(function(err, comment) {
     if (err) {return next(err);}
 
