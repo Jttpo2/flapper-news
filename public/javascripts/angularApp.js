@@ -42,6 +42,12 @@ app.factory('posts', ['$http', function($http) {
     });
   };
 
+  o.create = function(post) {
+    return $http.post('/posts', post).success(function(data) {
+      o.posts.push(data);
+    });
+  };
+
   return o;
 }]);
 
@@ -52,6 +58,15 @@ function($scope, $stateParams, posts) {
 
   $scope.post = posts.posts[$stateParams.id];
 
+  $scope.addComment = function(){
+    if($scope.body === '') { return; }
+    $scope.post.comments.push({
+      body: $scope.body,
+      author: 'user',
+      upvotes: 0
+    });
+    $scope.body = '';
+  };
 
 }]);
 
@@ -65,18 +80,26 @@ function($scope, posts){
   $scope.addPost = function() {
     // if (!$scope.title || $scope.title === '') {return;}
 
-
-    $scope.posts.push({
+    posts.create({
       title: $scope.title,
-      link: $scope.link,
-      upvotes: 0,
-      comments: [
-        {author: 'Bla', body: 'asum stuff', upvotes: 0},
-        {author: 'Alice', body: 'sheit', upvotes: 0},
-      ]
+      link: $scope.link
     });
+
     $scope.title = '';
     $scope.link = '';
+
+
+    // $scope.posts.push({
+    //   title: $scope.title,
+    //   link: $scope.link,
+    //   upvotes: 0,
+    //   comments: [
+    //     {author: 'Bla', body: 'asum stuff', upvotes: 0},
+    //     {author: 'Alice', body: 'sheit', upvotes: 0},
+    //   ]
+    // });
+    // $scope.title = '';
+    // $scope.link = '';
 
 
   };
