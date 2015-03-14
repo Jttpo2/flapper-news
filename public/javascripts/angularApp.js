@@ -6,7 +6,12 @@ app.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $url
   .state('home', {
     url: '/home',
     templateUrl: '/home.html',
-    controller: 'MainCtrl'
+    controller: 'MainCtrl',
+    resolve: {
+      postPromise: ['posts', function(posts) {
+        return posts.getAll();
+      }]
+    }
   })
   .state('posts', {
     url: '/posts/{id}',
@@ -17,19 +22,26 @@ app.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $url
   $urlRouterProvider.otherwise('home');
 }]);
 
-app.factory('posts', [function() {
+app.factory('posts', ['$http', function($http) {
 
   var o = {
     posts: [
-      {title:'post1', upvotes: 3, comments: [
-        {author: 'Bla', body: 'asum stuff', upvotes: 0},
-        {author: 'Alice', body: 'sheit', upvotes: 0},
-      ]},
-      {title:'post2', upvotes: 4},
-      {title:'post3', upvotes: 3},
-      {title:'post4', upvotes: 25},
+      // {title:'post1', upvotes: 3, comments: [
+      //   {author: 'Bla', body: 'asum stuff', upvotes: 0},
+      //   {author: 'Alice', body: 'sheit', upvotes: 0},
+      // ]},
+      // {title:'post2', upvotes: 4},
+      // {title:'post3', upvotes: 3},
+      // {title:'post4', upvotes: 25},
     ]
   };
+
+  o.getAll = function() {
+    return $http.get('/posts').success(function(data) {
+      angular.copy(data, o.posts);
+    });
+  };
+
   return o;
 }]);
 
